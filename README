@@ -1,0 +1,119 @@
+/* Copyright 2018 Andrei-Lucian Birziche */
+	***Antialiasing si micro renderer***
+OBIECTIVE:
+Implementarea unui program capabil sa redimensioneze o imagine micsorand pierderea
+de informatie folosind tehnica anti-aliasing de tip super sampling antialiasing
+(SSAA sau FSAA) si implementarea unui micromotor de randare, capabil sa creeze o poza
+ce contine o linie. Aceste programe vor fi implementate folosind thread-uri prin API-ul
+oferit de libraria pthread, in limbajul C. Rezolvarea va trebui sa scaleze cu numarul
+de thread-uri, ramanand intr-un interval de eficienta acceptat.
+
+1) Pentru prima parte a temei am ales sa incep prin a-mi declara in structura
+de imagine cateva variabile in care voi pastra informatiile despre aceasta, cat
+si 4 vectori de tip "unsigned char" (unul pentru grayscale, ceilalti 3 pentru
+color), in care se vor afla octetii corespunzatori. In functia de resize copiez
+detaliile din imaginea de intrare in cea de iesire, creez thread-urile si
+le pornesc, de aici incolo fiecaruia fiindu-i acordat un interval din
+noul spatiu de memorie alocat (pentru imaginea finala), impartirea fiind
+facuta in mod egal, pe baza formulelor de la laborator (start si end).
+Apoi sunt efectuate calculele si verificarile cerute, iar in final scrierea
+in fisierul de iesire.
+
+Scalabilitate:
+
+Resolution = 10000 x 10000:
+- resize factor = 2
+threads = 1: 1.37
+threads = 2: 0.70
+threads = 4: 0.33
+threads = 8: 0.27
+
+- resize factor = 3
+threads = 1: 1.2
+threads = 2: 0.60
+threads = 4: 0.30
+threads = 8: 0.17
+
+- resize factor = 4
+threads = 1: 1.02
+threads = 2: 0.51
+threads = 4: 0.25
+threads = 8: 0.15
+
+- resize factor = 8
+threads = 1: 0.94
+threads = 2: 0.47
+threads = 4: 0.23
+threads = 8: 0.11
+
+Resolution = 20000 x 20000:
+- resize factor = 2
+threads = 1: 5.34
+threads = 2: 2.67
+threads = 4: 1.33
+threads = 8: 0.67
+
+- resize factor = 3
+threads = 1: 4.87
+threads = 2: 2.42
+threads = 4: 1.20
+threads = 8: 0.61
+
+- resize factor = 4
+threads = 1: 4.17
+threads = 2: 2.07
+threads = 4: 1.03
+threads = 8: 0.54
+
+- resize factor = 8
+threads = 1: 3.82
+threads = 2: 1.92
+threads = 4: 0.95
+threads = 8: 0.47
+
+Resolution = 40000 x 40000:
+- resize factor = 2
+threads = 1: 21.43
+threads = 2: 10.65
+threads = 4: 5.37
+threads = 8: 2.70
+
+- resize factor = 3
+threads = 1: 19.51
+threads = 2: 9.76
+threads = 4: 4.89
+threads = 8: 2.44
+
+- resize factor = 4
+threads = 1: 16.38
+threads = 2: 8.37
+threads = 4: 4.18
+threads = 8: 2.08
+
+- resize factor = 8
+threads = 1: 15.37
+threads = 2: 7.70
+threads = 4: 3.87
+threads = 8: 1.99
+
+
+2) A doua parte este destul de asemanatoare cu prima in termeni de abordare,
+iesind in evidenta doar formula pe baza a ce pixeli vor fi albi, respectiv
+negrii.
+
+Scalabilitate:
+
+Resolution = 10000 x 10000:
+threads = 1: 4.41
+threads = 2: 2.27
+threads = 4: 1.43
+threads = 8: 1.21
+
+Resolution = 20000 x 20000:
+threads = 1: 17.74
+threads = 2: 9.32
+threads = 4: 4.72
+threads = 8: 4.93
+
+Timpii obtinuti sunt calculati folosind coada ibm-nehalem.q de pe cluster si
+sunt reprezentati in secunde.
